@@ -1,0 +1,16 @@
+diff -up akode-2.0.2/akode/plugins/ffmpeg_decoder/ffmpeg_decoder.cpp.ffmpeg akode-2.0.2/akode/plugins/ffmpeg_decoder/ffmpeg_decoder.cpp
+--- akode-2.0.2/akode/plugins/ffmpeg_decoder/ffmpeg_decoder.cpp.ffmpeg	2008-09-04 11:20:15.000000000 -0500
++++ akode-2.0.2/akode/plugins/ffmpeg_decoder/ffmpeg_decoder.cpp	2008-09-04 11:40:31.000000000 -0500
+@@ -29,9 +29,9 @@
+ #include "decoder.h"
+ 
+ #include <assert.h>
+-#include <ffmpeg/avcodec.h>
+-#include <ffmpeg/avformat.h>
+-#include <ffmpeg/avio.h>
++#include <ffmpeg/libavcodec/avcodec.h>
++#include <ffmpeg/libavformat/avformat.h>
++#include <ffmpeg/libavformat/avio.h>
+ 
+ #include "ffmpeg_decoder.h"
+ #include <iostream>
