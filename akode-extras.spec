@@ -1,12 +1,13 @@
 
 %if 0%{?fedora} > 2
 %define _with_ffmpeg --with-ffmpeg
+%define ffmpeg ffmpeg
 %endif
 
 Summary: Extra decoder plugins for akode 
 Name:	 akode-extras
 Version: 2.0.2
-Release: 1%{?dist}
+Release: 3%{?dist}
 
 License: GPLv2+%{?_with_ffmpeg:/LGPLv2+ (see description)}
 Group: 	 System Environment/Libraries
@@ -15,11 +16,14 @@ URL:     http://www.kde-apps.org/content/show.php?content=30375
 Source0: http://www.kde-apps.org/CONTENT/content-files/30375-akode-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Patch1: akode-2.0.2-ffmpeg-int64_c.patch
+Patch4: akode-2.0.2-gcc43.patch
+Patch10: akode-2.0.2-ffmpeg-int64_c.patch
+# for newer ffmpeg's that move headers around
+Patch11: akode-2.0.2-ffmpeg.patch
 
 BuildRequires: automake
 BuildRequires: libmad-devel
-%{?_with_ffmpeg:BuildRequires: ffmpeg-devel >= 0.4.9 }
+%{?_with_ffmpeg:BuildRequires: %{ffmpeg}-devel >= 0.4.9 }
 # Be mindful of these, since kdemultimedia-extras-nonfree needs to be rebuilt when/if anything
 # is added/removed -- Rex
 Provides: %{name}-mpeg_decoder = %{version}-%{release}
@@ -37,7 +41,10 @@ Requires: akode >= %{version}
 %prep
 %setup -q -n akode-%{version}%{?beta}
 
-%patch1 -p1 -b .ffmpeg-int64_c
+%patch4 -p1 -b .gcc43
+
+%patch10 -p1 -b .ffmpeg-int64_c
+%patch11 -p1 -b .ffmpeg
 
 #[ ! -f configure ] && \
 make -f Makefile.cvs
@@ -48,6 +55,13 @@ make -f Makefile.cvs
   --disable-static \
   --disable-debug --disable-warnings --disable-dependency-tracking \
   --without-libltdl \
+  --without-flac \
+  --without-oss \
+  --without-jack \
+  --without-libsamplerate \
+  --without-pulseaudio \
+  --without-speex \
+  --without-vorbis \
   --with-libmad \
   %{?_with_ffmpeg} %{!?_with_ffmpeg:--without-ffmpeg} \
 
@@ -61,17 +75,17 @@ make -C akode/plugins/mpeg_decoder
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
-make -C akode/plugins/mpeg_decoder   install DESTDIR=$RPM_BUILD_ROOT
-%{?_with_ffmpeg:make -C akode/plugins/ffmpeg_decoder install DESTDIR=$RPM_BUILD_ROOT}
+make -C akode/plugins/mpeg_decoder   install DESTDIR=%{buildroot}
+%{?_with_ffmpeg:make -C akode/plugins/ffmpeg_decoder install DESTDIR=%{buildroot}}
 
 # unpackaged files
-rm -f $RPM_BUILD_ROOT%{_libdir}/lib*.la
+rm -f %{buildroot}%{_libdir}/lib*.la
 
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 
 %files 
@@ -81,6 +95,13 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Sep 04 2008 Rex Dieter <rdieter@fedoraproject.org> 2.0.2-3
+- fix build 
+- spec cosmetics
+
+* Sun Aug 10 2008 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info - 2.0.2-2
+- rebuild for RPM Fusion
+
 * Sun Dec 23 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 2.0.2-1
 - akode-2.0.2
 
