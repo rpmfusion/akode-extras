@@ -8,9 +8,9 @@ diff -up akode-2.0.2/akode/plugins/ffmpeg_decoder/ffmpeg_decoder.cpp.ffmpeg akod
 -#include <ffmpeg/avcodec.h>
 -#include <ffmpeg/avformat.h>
 -#include <ffmpeg/avio.h>
-+#include <ffmpeg/libavcodec/avcodec.h>
-+#include <ffmpeg/libavformat/avformat.h>
-+#include <ffmpeg/libavformat/avio.h>
++#include <libavcodec/avcodec.h>
++#include <libavformat/avformat.h>
++#include <libavformat/avio.h>
  
  #include "ffmpeg_decoder.h"
  #include <iostream>
