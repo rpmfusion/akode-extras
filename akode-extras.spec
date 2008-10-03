@@ -1,5 +1,6 @@
 
-%if 0%{?fedora} > 2
+#if 0%{?fedora} > 2
+%if 0
 %define _with_ffmpeg --with-ffmpeg
 %define ffmpeg ffmpeg
 %endif
@@ -7,7 +8,7 @@
 Summary: Extra decoder plugins for akode 
 Name:	 akode-extras
 Version: 2.0.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 License: GPLv2+%{?_with_ffmpeg:/LGPLv2+ (see description)}
 Group: 	 System Environment/Libraries
@@ -16,10 +17,13 @@ URL:     http://www.kde-apps.org/content/show.php?content=30375
 Source0: http://www.kde-apps.org/CONTENT/content-files/30375-akode-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+# just s start, ffmpeg plugin only atm -- Rex
+Patch1: akode-2.0.2-no_undefined.patch
 Patch4: akode-2.0.2-gcc43.patch
 Patch10: akode-2.0.2-ffmpeg-int64_c.patch
 # for newer ffmpeg's that move headers around
 Patch11: akode-2.0.2-ffmpeg.patch
+
 
 BuildRequires: automake
 BuildRequires: libmad-devel
@@ -40,6 +44,8 @@ Requires: akode >= %{version}
 
 %prep
 %setup -q -n akode-%{version}%{?beta}
+
+%patch1 -p1 -b .no_undefined
 
 %patch4 -p1 -b .gcc43
 
@@ -95,6 +101,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Oct 03 2008 Rex Dieter <rdieter@fedoraproject.org> 2.0.2-4
+- no_undefined patch
+- omit ffmpeg_decoder (for now, until undefined symbols are fixed)
+
 * Thu Sep 04 2008 Rex Dieter <rdieter@fedoraproject.org> 2.0.2-3
 - fix build 
 - spec cosmetics

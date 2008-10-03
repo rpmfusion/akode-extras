@@ -1,0 +1,10 @@
+diff -up akode-2.0.2/akode/plugins/ffmpeg_decoder/Makefile.am.undefined akode-2.0.2/akode/plugins/ffmpeg_decoder/Makefile.am
+--- akode-2.0.2/akode/plugins/ffmpeg_decoder/Makefile.am.undefined	2005-11-19 06:02:20.000000000 -0600
++++ akode-2.0.2/akode/plugins/ffmpeg_decoder/Makefile.am	2008-10-03 09:52:33.000000000 -0500
+@@ -4,5 +4,5 @@ lib_LTLIBRARIES	= libakode_ffmpeg_decode
+ 
+ libakode_ffmpeg_decoder_la_SOURCES = ffmpeg_decoder.cpp
+ 
+-libakode_ffmpeg_decoder_la_LDFLAGS = -avoid-version -no-undefined $(AVCODEC_LDFLAGS) $(AVFORMAT_LDFLAGS)
++libakode_ffmpeg_decoder_la_LDFLAGS = -avoid-version $(KDE_NO_UNDEFINED) $(AVCODEC_LDFLAGS) $(AVFORMAT_LDFLAGS)
+ libakode_ffmpeg_decoder_la_LIBADD = ../../lib/libakode.la $(AVCODEC_LIBADD) $(AVFORMAT_LIBADD)
